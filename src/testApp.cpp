@@ -4,8 +4,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
-    cam.init(640, 360); 
-    //cam.setUri("http://192.168.5.85/axis-cgi/jpg/image.cgi?resolution=320x180");
+    cam.init(640, 360);
     cam.setHost("192.168.7.28");
     cam.setCredentials("root", "flab4711");
     cam.setVerbose(true);  

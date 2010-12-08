@@ -1,3 +1,25 @@
+/*==============================================================================
+
+	ofxIpCamera.h
+
+	ofxIpCamera: an ip camera grabber addon
+  
+	Copyright (C) 2010  Dan Wilcox <danomatika@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+==============================================================================*/
 #ifndef _OFX_IP_CAMERA
 #define _OFX_IP_CAMERA
 
@@ -12,16 +34,15 @@
 #include "Poco/Net/HTTPBasicCredentials.h"
 #include "Poco/Net/HTTPClientSession.h"
 
-// Authorization credentials created with: 
 /*
-	camera: http://192.168.5.85/operator/basic.shtml
+	example camera uri: http://192.168.5.85/operator/basic.shtml
     
 	References:
     http://pocoproject.org/docs/
     http://freeimage.sourceforge.net/fip/index.html
     http://www.cplusplus.com/reference/iostream/istream/get/
     
-    
+	OF forum post:
     http://www.openframeworks.cc/forum/viewtopic.php?f=8&t=3545
 */
 
@@ -61,6 +82,8 @@ class ofxIpCamera : public ofBaseVideo, protected ofxThread
             
             builds the uri automatically using the given width and height,
             call after init
+			
+			example uri:
             
             http://192.168.5.85/demo/demo.shtml?type=jpg&size=320x180&videoFormat=mjpeg&color=0&clock=0
             
@@ -71,10 +94,14 @@ class ofxIpCamera : public ofBaseVideo, protected ofxThread
         void setHost(string host);
         
         /**
-        	\brief	set the camera uri including query
+        	\brief	set the camera uri including query manually
             \param	uri	the camera uri
             
             overrides the prebuilt uri set by setHost
+			
+			example uri:
+			
+			http://192.168.5.85/axis-cgi/jpg/image.cgi?resolution=320x180
         */
 		void setUri(string uri);
         
