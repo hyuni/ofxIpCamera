@@ -1,7 +1,7 @@
 ofxIpCamera: an ip camera grabber addon
 =======================================
 
-2010 Dan Wilcox danomatika.com
+[Dan Wilcox](danomatika.com) 2010
 
 GPL v3
 
@@ -10,13 +10,12 @@ DESCRIPTION
 
 ofxIpCamera is an Open Frameworks addon for Axis IP Cameras which *should* work with other, generic ip cameras
 
-OpenFrameworks is a cross platform open source toolkit for creative coding in C++
-http://www.openframeworks.cc/
+[OpenFrameworks](http://www.openframeworks.cc/) is a cross platform open source toolkit for creative coding in C++
 
 BUILD REQUIREMENTS
 ------------------
 
-Download OpenFrameworks 0.6+ from http://www.openframeworks.cc/ and unpack the ofxIpCamera source code into the apps folder to run the test app.
+Download [OpenFrameworks 0.6+](http://www.openframeworks.cc/) and unpack the ofxIpCamera source code into the apps folder to run the test app.
 
 Furthermore, you can simply add the ofxIpCamera.h and ofxIpCamera.cpp to your own applciations. 
 
@@ -40,7 +39,7 @@ The grabber is threaded and will continually grab images after you call open(). 
 DEVELOPING
 ----------
 
-You can help develop ofxIpCamera on GitHub: https://github.com/danomatika/ofxIpCamera
+You can help develop ofxIpCamera on GitHub: [https://github.com/danomatika/ofxIpCamera](https://github.com/danomatika/ofxIpCamera)
 
 Create an account, clone or fork the repo, then request a push/merge.
 
