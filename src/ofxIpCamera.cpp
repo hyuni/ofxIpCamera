@@ -24,9 +24,12 @@
 
 #include "ofUtils.h"
 
+#include "FreeImage.h"
+
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPResponse.h"
 #include "Poco/Net/NetException.h"
+#include "Poco/Buffer.h"
 
 //--------------------------------------------------------------------
 ofxIpCamera::ofxIpCamera()
