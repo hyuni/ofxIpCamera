@@ -12,6 +12,8 @@ ofxIpCamera is an Open Frameworks addon for Axis IP Cameras which *should* work 
 
 [OpenFrameworks](http://www.openframeworks.cc/) is a cross platform open source toolkit for creative coding in C++
 
+See the [OF forum post](http://www.openframeworks.cc/forum/viewtopic.php?f=9&t=4087&hilit=ip+camera+axis) as well.
+
 BUILD REQUIREMENTS
 ------------------
 

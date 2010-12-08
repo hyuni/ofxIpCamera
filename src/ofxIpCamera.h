@@ -41,9 +41,10 @@
     http://pocoproject.org/docs/
     http://freeimage.sourceforge.net/fip/index.html
     http://www.cplusplus.com/reference/iostream/istream/get/
-    
-	OF forum post:
     http://www.openframeworks.cc/forum/viewtopic.php?f=8&t=3545
+	
+	OF forum post:
+	http://www.openframeworks.cc/forum/viewtopic.php?f=9&t=4087&hilit=ip+camera+axis
 */
 
 class ofxIpCamera : public ofBaseVideo, protected ofxThread
