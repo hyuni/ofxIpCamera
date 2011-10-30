@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		307525ED11CA7E49007EB8FF /* ofxIpCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307525EB11CA7E49007EB8FF /* ofxIpCamera.cpp */; };
+		3000D918145DBDF0009FC3EC /* ofxIpCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3000D916145DBDF0009FC3EC /* ofxIpCamera.cpp */; };
 		307525F511CA84AF007EB8FF /* ofxThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307525F311CA84AF007EB8FF /* ofxThread.cpp */; };
 		3077439D11CC21820022444F /* openCV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3077438B11CC21820022444F /* openCV.a */; };
 		3077439E11CC21820022444F /* ofxCvColorImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3077438E11CC21820022444F /* ofxCvColorImage.cpp */; };
@@ -87,8 +87,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		307525EB11CA7E49007EB8FF /* ofxIpCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxIpCamera.cpp; sourceTree = "<group>"; };
-		307525EC11CA7E49007EB8FF /* ofxIpCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxIpCamera.h; sourceTree = "<group>"; };
+		3000D916145DBDF0009FC3EC /* ofxIpCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxIpCamera.cpp; sourceTree = "<group>"; };
+		3000D917145DBDF0009FC3EC /* ofxIpCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxIpCamera.h; sourceTree = "<group>"; };
 		307525F011CA84AF007EB8FF /* Instructions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions.txt; sourceTree = "<group>"; };
 		307525F311CA84AF007EB8FF /* ofxThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxThread.cpp; sourceTree = "<group>"; };
 		307525F411CA84AF007EB8FF /* ofxThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxThread.h; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		E49DA7BD10CD396F0006B5A8 /* freeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = freeimage.a; path = ../../../libs/FreeImage/lib/osx/freeimage.a; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* ofxIpCameraDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ofxIpCameraDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* ofxIpCameraExampleDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ofxIpCameraExampleDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
@@ -203,6 +203,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3000D914145DBDD4009FC3EC /* ofxIpCamera */ = {
+			isa = PBXGroup;
+			children = (
+				3000D915145DBDF0009FC3EC /* src */,
+			);
+			name = ofxIpCamera;
+			sourceTree = "<group>";
+		};
+		3000D915145DBDF0009FC3EC /* src */ = {
+			isa = PBXGroup;
+			children = (
+				3000D916145DBDF0009FC3EC /* ofxIpCamera.cpp */,
+				3000D917145DBDF0009FC3EC /* ofxIpCamera.h */,
+			);
+			name = src;
+			path = ofxIpCamera/src;
+			sourceTree = "<group>";
+		};
 		307525EE11CA84AF007EB8FF /* ofxThread */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +339,7 @@
 		E44665C70F5B3E03005D0BF0 /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				3000D914145DBDD4009FC3EC /* ofxIpCamera */,
 				3077437411CC21810022444F /* ofxOpenCv */,
 				307525EE11CA84AF007EB8FF /* ofxThread */,
 			);
@@ -517,7 +536,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				E4B69B5B0A3A1756003C02F2 /* ofxIpCameraDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* ofxIpCameraExampleDebug.app */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4C2422310CC54B6004149E2 /* openFrameworks */,
@@ -529,8 +548,6 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				307525EB11CA7E49007EB8FF /* ofxIpCamera.cpp */,
-				307525EC11CA7E49007EB8FF /* ofxIpCamera.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
@@ -615,9 +632,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* ofxIpCamera */ = {
+		E4B69B5A0A3A1756003C02F2 /* ofxIpCameraExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "ofxIpCamera" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "ofxIpCameraExample" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -630,9 +647,9 @@
 			dependencies = (
 				E4C2422810CC54DA004149E2 /* PBXTargetDependency */,
 			);
-			name = ofxIpCamera;
+			name = ofxIpCameraExample;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* ofxIpCameraDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* ofxIpCameraExampleDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -640,7 +657,7 @@
 /* Begin PBXProject section */
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "ofxIpCamera" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "ofxIpCameraExample" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -661,7 +678,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* ofxIpCamera */,
+				E4B69B5A0A3A1756003C02F2 /* ofxIpCameraExample */,
 			);
 		};
 /* End PBXProject section */
@@ -699,7 +716,6 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
-				307525ED11CA7E49007EB8FF /* ofxIpCamera.cpp in Sources */,
 				307525F511CA84AF007EB8FF /* ofxThread.cpp in Sources */,
 				3077439E11CC21820022444F /* ofxCvColorImage.cpp in Sources */,
 				3077439F11CC21820022444F /* ofxCvContourFinder.cpp in Sources */,
@@ -707,6 +723,7 @@
 				307743A111CC21820022444F /* ofxCvGrayscaleImage.cpp in Sources */,
 				307743A211CC21820022444F /* ofxCvImage.cpp in Sources */,
 				307743A311CC21820022444F /* ofxCvShortImage.cpp in Sources */,
+				3000D918145DBDF0009FC3EC /* ofxIpCamera.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,10 +741,8 @@
 		E4B27CA010CBF8A600536013 /* ReleaseUniversal */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -757,7 +772,7 @@
 					"-lpthread",
 				);
 				OTHER_LDFLAGS = "";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = ReleaseUniversal;
 		};
@@ -808,7 +823,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../addons/ofxOpenCv/libs/opencv/lib/osx\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = ofxIpCameraUniversal;
+				PRODUCT_NAME = ofxIpCameraExampleUniversal;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -817,7 +832,8 @@
 		E4B69B4E0A3A1720003C02F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -845,14 +861,15 @@
 					"-lpthread",
 				);
 				OTHER_LDFLAGS = "";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Debug;
 		};
 		E4B69B4F0A3A1720003C02F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -882,7 +899,7 @@
 					"-lpthread",
 				);
 				OTHER_LDFLAGS = "";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Release;
 		};
@@ -935,7 +952,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../addons/ofxOpenCv/libs/opencv/lib/osx\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = ofxIpCameraDebug;
+				PRODUCT_NAME = ofxIpCameraExampleDebug;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -988,7 +1005,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../addons/ofxOpenCv/libs/opencv/lib/osx\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = ofxIpCamera;
+				PRODUCT_NAME = ofxIpCameraExample;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -997,7 +1014,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "ofxIpCamera" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "ofxIpCameraExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -1007,7 +1024,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "ofxIpCamera" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "ofxIpCameraExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
