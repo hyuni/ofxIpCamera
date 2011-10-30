@@ -4,7 +4,7 @@
 
 	ofxIpCamera: an ip camera grabber addon
   
-	Copyright (C) 2010  Dan Wilcox <danomatika@gmail.com>
+	Copyright (C) 2010, 2011  Dan Wilcox <danomatika@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include "ofGraphics.h"
 #include "ofTypes.h"
 
-#include "ofxThread.h"
+#include "ofThread.h"
 
 #include "Poco/URI.h"
 #include "Poco/Net/HTTPBasicCredentials.h"
@@ -47,16 +47,16 @@
 	http://www.openframeworks.cc/forum/viewtopic.php?f=9&t=4087&hilit=ip+camera+axis
 */
 
-class ofxIpCamera : public ofBaseVideo, protected ofxThread
-{
+class ofxIpCamera : public ofBaseVideo, protected ofThread {
 
 	public :
 
 		ofxIpCamera();
 		virtual ~ofxIpCamera();
 
-		/// is the current frame new?
-		bool isFrameNew() {return true;}
+		/// is the current frame new after a call to update()?
+        /// only valid when the thread is running
+		bool isFrameNew();
         
         /// open the connection and start grabbing images
         void open();
@@ -72,6 +72,9 @@ class ofxIpCamera : public ofBaseVideo, protected ofxThread
         
         /// get the raw pixels of the most recent frame
 		unsigned char 	* getPixels();
+        
+        /// get the pixel reference
+        ofPixels& getPixelsRef();
 		
         ofTexture &		getTextureReference();
 		
@@ -128,6 +131,8 @@ class ofxIpCamera : public ofBaseVideo, protected ofxThread
             
             call this function when using the the texture, otherwise the
             texture will not be updated from the grabbed pixels
+            
+            use isFrameNew to check is a new frame was grabbed after the update
         */
         void update();
         
@@ -161,10 +166,11 @@ class ofxIpCamera : public ofBaseVideo, protected ofxThread
 		ofTexture 				tex;				// the user tex
 		bool 					bVerbose;
 		bool 					bGrabberInited;
-	    unsigned char * 		pixels;
+	    ofPixels                pixels;
+        bool                    bIsFrameNew;
         
     private:
-    	
+        
         // setup a session object with host, etc
         void setupSession(Poco::Net::HTTPClientSession& client);
         
@@ -173,6 +179,9 @@ class ofxIpCamera : public ofBaseVideo, protected ofxThread
     
         // thread function
         void threadedFunction();
+        
+        bool                    bNeedsUpdate;   // update the pixels?
+        ofPixels                pixelsTemp;     // threaded copy
 };
 
 #endif

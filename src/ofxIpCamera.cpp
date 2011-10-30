@@ -4,7 +4,7 @@
 
 	ofxIpCamera: an ip camera grabber addon
   
-	Copyright (C) 2010  Dan Wilcox <danomatika@gmail.com>
+	Copyright (C) 2010, 2011  Dan Wilcox <danomatika@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,98 +32,97 @@
 #include "Poco/Buffer.h"
 
 //--------------------------------------------------------------------
-ofxIpCamera::ofxIpCamera()
-{
+ofxIpCamera::ofxIpCamera() {
 	// common
 	bVerbose 				= false;
 	bGrabberInited 			= false;
 	bUseTexture				= true;
 	width 					= 320;	// default setting
 	height 					= 180;	// default setting
-	pixels					= NULL;
+    bIsFrameNew             = false;
+    bNeedsUpdate            = false;
 }
 
 
 //--------------------------------------------------------------------
-ofxIpCamera::~ofxIpCamera()
-{
+ofxIpCamera::~ofxIpCamera() {
 	close();
     clear();
 }
 
 //--------------------------------------------------------------------
-void ofxIpCamera::setVerbose(bool bTalkToMe)
-{
+bool ofxIpCamera::isFrameNew() {
+    if(isThreadRunning()) {
+        bool curIsFrameNew = bIsFrameNew;
+        bIsFrameNew = false;
+        return curIsFrameNew;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------
+void ofxIpCamera::setVerbose(bool bTalkToMe) {
 	bVerbose = bTalkToMe;
 }
 
 //--------------------------------------------------------------------
-void ofxIpCamera::setHost(string host)
-{
-	try
-    {
+void ofxIpCamera::setHost(string host) {
+	try {
     	uri = "http://"+host;
         uri.setPath("/axis-cgi/jpg/image.cgi");
         uri.setQuery("resolution="+ofToString(width)+"x"+ofToString(height));
     }
-    catch(Poco::SyntaxException& e)
-    {
+    catch(Poco::SyntaxException& e) {
     	ofLog(OF_LOG_ERROR, "ofxIpCamera: "+e.displayText());
         return;
     }
 }
 
 //--------------------------------------------------------------------
-void ofxIpCamera::setUri(string uri)
-{
-	try
-    {
+void ofxIpCamera::setUri(string uri) {
+	try {
     	this->uri = uri;
     }
-    catch(Poco::SyntaxException& e)
-    {
+    catch(Poco::SyntaxException& e) {
     	ofLog(OF_LOG_ERROR, "ofxIpCamera: "+e.displayText());
         return;
     }
 }
 
 //--------------------------------------------------------------------
-void ofxIpCamera::setCredentials(string username, string password)
-{
+void ofxIpCamera::setCredentials(string username, string password) {
 	credentials.setUsername(username);
     credentials.setPassword(password);
 }
 
 //---------------------------------------------------------------------------
-unsigned char * ofxIpCamera::getPixels()
-{
-	this->lock();
+unsigned char * ofxIpCamera::getPixels() {
+	return pixels.getPixels();
+}
+
+//---------------------------------------------------------------------------
+ofPixels& ofxIpCamera::getPixelsRef() {
 	return pixels;
-    this->unlock();
 }
 
 //------------------------------------
 //for getting a reference to the texture
-ofTexture & ofxIpCamera::getTextureReference()
-{
-	if(!tex.bAllocated())
-    {
+ofTexture & ofxIpCamera::getTextureReference() {
+	if(!tex.bAllocated()) {
 		ofLog(OF_LOG_WARNING, "ofxIpCamera: getTextureReference - texture is not allocated");
 	}
 	return tex;
 }
 
 //--------------------------------------------------------------------
-void ofxIpCamera::open()
-{
-	if(!bGrabberInited)
-	{
+void ofxIpCamera::open() {
+
+	if(!bGrabberInited) {
     	ofLog(OF_LOG_WARNING, "ofxIpCamera: Cannot open, init not called");
         return;
     }
     
-	if(uri.empty())
-    {
+	if(uri.empty()) {
     	ofLog(OF_LOG_WARNING, "ofxIpCamera: Cannot open, uri not set");
         return;
     }
@@ -132,16 +131,17 @@ void ofxIpCamera::open()
 }
 
 //--------------------------------------------------------------------
-void ofxIpCamera::close()
-{
+void ofxIpCamera::close() {
 	if(isThreadRunning())
 		stopThread();
+    bIsFrameNew = false;
+    bNeedsUpdate = false;
 }
 
 //--------------------------------------------------------------------
-bool ofxIpCamera::init(int w, int h, bool setUseTexture)
-{
-	close();
+bool ofxIpCamera::init(int w, int h, bool setUseTexture) {
+	
+    close();
     clear();
     
     bUseTexture = setUseTexture;
@@ -149,10 +149,11 @@ bool ofxIpCamera::init(int w, int h, bool setUseTexture)
     width = w;
     height = h;
     
-    pixels = new unsigned char[width*height*3];
-    memset(pixels, 0, width*height*3);
-    if(bUseTexture)
-    {
+    pixels.allocate(width, height, OF_PIXELS_RGB);
+    pixelsTemp.allocate(width, height, OF_PIXELS_RGB);
+    pixels.set(0);
+    pixelsTemp.set(0);
+    if(bUseTexture) {
         tex.allocate(width, height, GL_RGB);
     }
     
@@ -163,38 +164,40 @@ bool ofxIpCamera::init(int w, int h, bool setUseTexture)
 }
 
 //----------------------------------------------------------
-void ofxIpCamera::clear()
-{
-	if(pixels != NULL)
-    {
-		delete[] pixels;
-		pixels = NULL;
-	}
-
+void ofxIpCamera::clear() {
+    pixels.clear();
+    pixelsTemp.clear();
 	tex.clear();
-    
     bGrabberInited = false;
 }
 
 //----------------------------------------------------------
-void ofxIpCamera::update()
-{
+void ofxIpCamera::update() {
 	// you need to call init() before running!
-	assert(pixels);
+	assert(bGrabberInited);
 
 	this->lock();
-    if(bUseTexture)
-    {
-        tex.loadData(pixels, width, height, GL_RGB);
-    }    
+    
+    if(bNeedsUpdate) {
+    
+        // copy pixels from temp pixels
+        pixels = pixelsTemp;
+    
+        // update texture
+        if(bUseTexture) {
+            tex.loadData(pixels.getPixels(), width, height, GL_RGB);
+        }
+        
+        bNeedsUpdate = false;
+        bIsFrameNew = true;
+    }
     this->unlock();
 }
 
 //----------------------------------------------------------
-bool ofxIpCamera::grabFrame()
-{
+bool ofxIpCamera::grabFrame() {
 	// you need to call init() before running!
-	assert(pixels);
+	assert(bGrabberInited);
     
     Poco::Net::HTTPClientSession client;
     setupSession(client);
@@ -203,8 +206,7 @@ bool ofxIpCamera::grabFrame()
 }
 
 //------------------------------------
-void ofxIpCamera::setUseTexture(bool bUse)
-{
+void ofxIpCamera::setUseTexture(bool bUse) {
 	bUseTexture = bUse;
 }
 
@@ -212,51 +214,43 @@ void ofxIpCamera::setUseTexture(bool bUse)
 //to be able to set anchor points outside the image
 
 //----------------------------------------------------------
-void ofxIpCamera::setAnchorPercent(float xPct, float yPct)
-{
+void ofxIpCamera::setAnchorPercent(float xPct, float yPct) {
     if(bUseTexture) tex.setAnchorPercent(xPct, yPct);
 }
 
 //----------------------------------------------------------
-void ofxIpCamera::setAnchorPoint(int x, int y)
-{
+void ofxIpCamera::setAnchorPoint(int x, int y) {
     if(bUseTexture) tex.setAnchorPoint(x, y);
 }
 
 //----------------------------------------------------------
-void ofxIpCamera::resetAnchor()
-{
+void ofxIpCamera::resetAnchor() {
    	if(bUseTexture) tex.resetAnchor();
 }
 
 //----------------------------------------------------------
-void ofxIpCamera::draw(float _x, float _y, float _w, float _h)
-{
+void ofxIpCamera::draw(float _x, float _y, float _w, float _h) {
     if(bUseTexture) tex.draw(_x, _y, _w, _h);    
 }
 
 //----------------------------------------------------------
-void ofxIpCamera::draw(float _x, float _y)
-{
+void ofxIpCamera::draw(float _x, float _y) {
 	draw(_x, _y, (float)width, (float)height);
 }
 
 //----------------------------------------------------------
-float ofxIpCamera::getHeight()
-{
+float ofxIpCamera::getHeight() {
 	return (float)height;
 }
 
 //----------------------------------------------------------
-float ofxIpCamera::getWidth()
-{
+float ofxIpCamera::getWidth() {
 	return (float)width;
 }
 
 /* ***** PRIVATE ***** */
 
-void ofxIpCamera::setupSession(Poco::Net::HTTPClientSession& client)
-{
+void ofxIpCamera::setupSession(Poco::Net::HTTPClientSession& client) {
     client.setHost(uri.getHost());
     if(uri.getPort() != 0)
     	client.setPort(uri.getPort());
@@ -265,20 +259,17 @@ void ofxIpCamera::setupSession(Poco::Net::HTTPClientSession& client)
     client.setTimeout(Poco::Timespan(2, 0)); // s, ms; this is live, dont wait too long for a response
 }
 
-bool ofxIpCamera::grabOneFrame(Poco::Net::HTTPClientSession& client)
-{
+bool ofxIpCamera::grabOneFrame(Poco::Net::HTTPClientSession& client) {
 	// send request
     Poco::Net::HTTPRequest request;
     request.setVersion(Poco::Net::HTTPMessage::HTTP_1_1);
     request.setURI(uri.getPathAndQuery());
     credentials.authenticate(request);
-    try
-    {
+    try {
         //request.write(cout);	// print header
         client.sendRequest(request);
     }
-    catch(Poco::Exception& e)
-    {
+    catch(Poco::Exception& e) {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: "+e.displayText());
         return false;
     }
@@ -286,33 +277,28 @@ bool ofxIpCamera::grabOneFrame(Poco::Net::HTTPClientSession& client)
     // receive response
     Poco::Net::HTTPResponse response;
     istream* responseBody;
-    try
-    {
+    try {
         responseBody = (istream*) &client.receiveResponse(response);
     }
-    catch(Poco::Net::NoMessageException& e)
-    {
+    catch(Poco::Net::NoMessageException& e) {
         // catch no message exception when shutting down thread
         return false;
     }
     //response.write(cout);	// print header
     
     // check response
-    if(response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
-    {
+    if(response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK) {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: Got response: "+
               ofToString(response.getStatus())+" "+response.getReason());
         return false;
     }
-    if(response.getContentLength() == 0)
-    {
+    if(response.getContentLength() == 0) {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: Received content body is empty");
         return false;
     }
     
     // grab image from response into memory
-    if(response.getContentType() != "image/jpeg")
-    {
+    if(response.getContentType() != "image/jpeg") {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: Received content type is not \"image/jpeg\"");
         return false;
     }
@@ -323,31 +309,27 @@ bool ofxIpCamera::grabOneFrame(Poco::Net::HTTPClientSession& client)
     
     // decode and load image from raw memory
     FIMEMORY* imageMem = FreeImage_OpenMemory(buffer.begin(), response.getContentLength());
-    if(imageMem == NULL)
-    {
+    if(imageMem == NULL) {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: FreeImage_OpenMemory failed");
         return false;
     }
     
     FREE_IMAGE_FORMAT format = FreeImage_GetFileTypeFromMemory(imageMem, 0);
-    if(format != FIF_JPEG)
-    {
+    if(format != FIF_JPEG) {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: Image is not jpeg format: "+ofToString(format));
         FreeImage_CloseMemory(imageMem);
         return false;
     }
     
     FIBITMAP* image = FreeImage_LoadFromMemory(format, imageMem, 0);
-    if(image == NULL)
-    {
+    if(image == NULL) {
         ofLog(OF_LOG_ERROR, "ofxIpCamera: FreeImage_LoadFromMemoryFailed");
         FreeImage_CloseMemory(imageMem);
         return false;
     }
     
     // resize if needed
-    if(width != FreeImage_GetWidth(image) || height != FreeImage_GetHeight(image))
-    {
+    if(width != FreeImage_GetWidth(image) || height != FreeImage_GetHeight(image)) {
         ofLog(OF_LOG_WARNING, "ofxIpCamera: Resizing image from "+
               ofToString((int) FreeImage_GetWidth(image))+"x"+
               ofToString((int)FreeImage_GetHeight(image))+
@@ -355,25 +337,17 @@ bool ofxIpCamera::grabOneFrame(Poco::Net::HTTPClientSession& client)
         FreeImage_Rescale(image, width, height, FILTER_BOX);	// fastest rescale filter
     }
     
-    // load image into pixels
+    // load image into pixels temp
     this->lock();
     int bpp = FreeImage_GetBPP(image);
     int scanWidth = FreeImage_GetPitch(image);
-    FreeImage_ConvertToRawBits(pixels, image, scanWidth, bpp,
+    FreeImage_ConvertToRawBits(pixelsTemp.getPixels(), image, scanWidth, bpp,
         FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, true);
     
     // swap RGB
-    if(bpp != 8)
-    {
-		unsigned char temp;
-		int byteCount = bpp/8;
-		for(int i = 0; i < width*height; ++i)
-        {
-			temp = pixels[i*byteCount];
-			pixels[i*byteCount] = pixels[i*byteCount+2];
-			pixels[i*byteCount+2] = temp;
-		}
-	}
+    pixelsTemp.swapRgb();
+    
+    bNeedsUpdate = true;
     
     this->unlock();
 
@@ -384,21 +358,18 @@ bool ofxIpCamera::grabOneFrame(Poco::Net::HTTPClientSession& client)
     return true;
 }
 
-void ofxIpCamera::threadedFunction()
-{    	
+void ofxIpCamera::threadedFunction() {    	
     // setup http session
     Poco::Net::HTTPClientSession client;
 	setupSession(client);
 
-	if(bVerbose)
-    {
+	if(bVerbose) {
     	cout << "ofxIpCamera: Thread started" << endl;
     	cout << "ofxIpCamera: Uri \"" << uri.toString() << "\"" << endl;
     	cout << "ofxIpCamera: Host " << client.getHost() << " Port " << client.getPort() << endl;
     }
 
-	while(isThreadRunning())
-    {
+	while(isThreadRunning()) {
     	if(!grabOneFrame(client))
         	break;
     }
